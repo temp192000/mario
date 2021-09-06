@@ -117,6 +117,12 @@ function create(){
     this.physics.add.collider(platforms, this.player);
     // this.physics.add.collider(this.player, apple); //unrealistic
     this.physics.add.overlap(this.player, apple, eatApple, null, this);
+
+    this.cameras.main.setBounds(0, 0, W, H);
+    this.physics.world.setBounds(0, 0, W, H);
+
+    this.cameras.main.startFollow(this.player, true, true);
+    this.cameras.main.setZoom(1.5);
 }
 
 function update(){
