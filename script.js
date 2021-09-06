@@ -30,7 +30,7 @@ let config = {
 let game = new Phaser.Game(config);
 let gameConfig = {
     playerSpeed: 150,
-    playerJumpSpeed: -650
+    playerJumpSpeed: -700
 }
 
 function preload(){
@@ -58,6 +58,27 @@ function create(){
 
     this.player = this.physics.add.sprite(100, 100, 'dude', 4);
     this.player.setBounce(0.3);
+
+    this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'center',
+        frames: this.anims.generateFrameNumbers('dude', {start: 4, end: 4}),
+        frameRate: 10,
+    });
+
+    this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+        frameRate: 10,
+        repeat: -1
+    });
+
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -87,7 +108,7 @@ function create(){
     let platforms = this.physics.add.staticGroup();
     platforms.create(500, 350, 'ground').setScale(2, 0.5).refreshBody();
     platforms.create(700, 200, 'ground').setScale(2, 0.5).refreshBody();
-    platforms.create(220, 200, 'ground').setScale(2, 0.5).refreshBody();
+    platforms.create(100, 200, 'ground').setScale(2, 0.5).refreshBody();
     platforms.add(ground);
 
     this.physics.add.collider(platforms, this.apple);
@@ -97,10 +118,13 @@ function create(){
 function update(){
     if(this.cursors.left.isDown){
         this.player.setVelocityX(-gameConfig.playerSpeed);
+        this.player.anims.play('left', true);
     }else if(this.cursors.right.isDown){
         this.player.setVelocityX(gameConfig.playerSpeed);
+        this.player.anims.play('right', true);
     }else{
         this.player.setVelocityX(0);
+        this.player.anims.play('center', true);
     }
 
     if(this.cursors.up.isDown && this.player.body.touching.down){
