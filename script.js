@@ -28,6 +28,10 @@ let config = {
 };
 
 let game = new Phaser.Game(config);
+let gameConfig = {
+    playerSpeed: 150,
+    playerJumpSpeed: -650
+}
 
 function preload(){
     this.load.image('ground', './assets/topground.png');
@@ -54,8 +58,10 @@ function create(){
 
     this.player = this.physics.add.sprite(100, 100, 'dude', 4);
     this.player.setBounce(0.3);
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
     this.physics.add.existing(ground, true);
-    this.physics.add.collider(ground, this.player);
     // ground.body.allowGravity = false;
     // ground.body.immovable = true;
 
@@ -85,6 +91,19 @@ function create(){
     platforms.add(ground);
 
     this.physics.add.collider(platforms, this.apple);
+    this.physics.add.collider(platforms, this.player);
 }
 
-function update(){}
+function update(){
+    if(this.cursors.left.isDown){
+        this.player.setVelocityX(-gameConfig.playerSpeed);
+    }else if(this.cursors.right.isDown){
+        this.player.setVelocityX(gameConfig.playerSpeed);
+    }else{
+        this.player.setVelocityX(0);
+    }
+
+    if(this.cursors.up.isDown && this.player.body.touching.down){
+        this.player.setVelocityY(gameConfig.playerJumpSpeed);
+    }
+}
