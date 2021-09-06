@@ -16,7 +16,7 @@ let config = {
             gravity: {
                 y: 1000
             },
-            debug: true,
+            // debug: true,
         }
     },
 
@@ -86,7 +86,7 @@ function create(){
     // ground.body.allowGravity = false;
     // ground.body.immovable = true;
 
-    this.apple = this.physics.add.group({
+    let apple = this.physics.add.group({
         key: 'apple',
         repeat: 8,
         setScale: {
@@ -100,8 +100,8 @@ function create(){
         }
     });
     
-    // this.physics.add.collider(ground, this.apple);
-    this.apple.children.iterate(function(f){
+    // this.physics.add.collider(ground, apple);
+    apple.children.iterate(function(f){
         f.setBounce(Phaser.Math.FloatBetween(0.4, 0.7));
     });
 
@@ -111,8 +111,10 @@ function create(){
     platforms.create(100, 200, 'ground').setScale(2, 0.5).refreshBody();
     platforms.add(ground);
 
-    this.physics.add.collider(platforms, this.apple);
+    this.physics.add.collider(platforms, apple);
     this.physics.add.collider(platforms, this.player);
+    // this.physics.add.collider(this.player, apple); //unrealistic
+    this.physics.add.overlap(this.player, apple, eatApple, null, this);
 }
 
 function update(){
@@ -130,4 +132,9 @@ function update(){
     if(this.cursors.up.isDown && this.player.body.touching.down){
         this.player.setVelocityY(gameConfig.playerJumpSpeed);
     }
+}
+
+
+function eatApple(player, apple){
+    apple.disableBody(true, true);
 }
