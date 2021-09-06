@@ -15,7 +15,8 @@ let config = {
         arcade: {
             gravity: {
                 y: 1000
-            }
+            },
+            debug: true,
         }
     },
 
@@ -72,10 +73,18 @@ function create(){
         }
     });
     
-    this.physics.add.collider(ground, this.apple);
+    // this.physics.add.collider(ground, this.apple);
     this.apple.children.iterate(function(f){
-        f.setBounce(Phaser.Math.FloatBetween(0.4, 0.8));
-    })
+        f.setBounce(Phaser.Math.FloatBetween(0.4, 0.7));
+    });
+
+    let platforms = this.physics.add.staticGroup();
+    platforms.create(500, 350, 'ground').setScale(2, 0.5).refreshBody();
+    platforms.create(700, 200, 'ground').setScale(2, 0.5).refreshBody();
+    platforms.create(220, 200, 'ground').setScale(2, 0.5).refreshBody();
+    platforms.add(ground);
+
+    this.physics.add.collider(platforms, this.apple);
 }
 
 function update(){}
