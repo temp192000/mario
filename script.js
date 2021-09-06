@@ -1,6 +1,6 @@
 let config = {
-    // type: Phaser.AUTO,
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
+    // type: Phaser.CANVAS,
     
     scale:{
         mode: Phaser.Scale.FIT,
@@ -37,6 +37,7 @@ function preload(){
     this.load.image('ground', './assets/topground.png');
     this.load.image('apple', './assets/apple.png');
     this.load.image('sky', './assets/background.png');
+    this.load.image('ray', './assets/ray.png')
     this.load.spritesheet('dude', './assets/dude.png', {
         frameWidth: 32,
         frameHeight: 48
@@ -54,7 +55,30 @@ function create(){
     background.setOrigin(0, 0);
     background.displayWidth = W;
     // background.displayWidth = H;
-    background.depth = -1;
+    background.depth = -2;
+
+    let rays = [];
+    for(let i = -10; i <= 10; i++){
+        let ray = this.add.sprite(W/2, H-100, 'ray');
+        ray.displayWidth = W;
+        ray.displayHeight = 1.5*H;
+        ray.setOrigin(0.5, 1);
+        ray.alpha = 0.2;
+        ray.angle = i * 20;
+        ray.depth = -1;
+        rays.push(ray);
+    }
+
+    this.tweens.add({
+        targets: rays,
+        props:{
+            angle:{
+                value: "+=20",
+            }
+        },
+        duration: 8000,
+        repeat: -1
+    })
 
     this.player = this.physics.add.sprite(100, 100, 'dude', 4);
     this.player.setBounce(0.3);
